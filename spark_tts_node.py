@@ -66,13 +66,12 @@ class SparkTTSNode:
 
         return self.model
 
-    def generate_speech(self, text, model_path, device):
+    def generate_speech(self, ref_audio, text, model_path, device):
         # 加载模型
         model = self.load_model_if_needed(model_path, device)
 
         # TODO: 从输入参数获取控制参数
         prompt_text = ""
-        ref_audio = None,
         gender = "neutral"
         pitch = 0.0
         speed = 1.0

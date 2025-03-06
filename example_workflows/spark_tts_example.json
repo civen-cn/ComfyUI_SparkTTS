@@ -1,0 +1,150 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 4,
+      "type": "PreviewAudio",
+      "pos": [
+        -733.9069213867188,
+        -284.1856384277344
+      ],
+      "size": [
+        315,
+        88
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 6,
+      "type": "VHS_LoadAudioUpload",
+      "pos": [
+        -1397.3968505859375,
+        -285.8581237792969
+      ],
+      "size": [
+        243.818359375,
+        130
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadAudioUpload"
+      },
+      "widgets_values": {
+        "audio": "prompt_audio.wav",
+        "start_time": 0,
+        "duration": 0,
+        "choose audio to upload": "image"
+      }
+    },
+    {
+      "id": 8,
+      "type": "SparkTTS",
+      "pos": [
+        -1144.41650390625,
+        -287.60675048828125
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "ref_audio",
+          "type": "AUDIO",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SparkTTS"
+      },
+      "widgets_values": [
+        "你好，这是一段测试文本。",
+        "Spark-TTS-0.5B",
+        "cuda",
+        [
+          false,
+          true
+        ]
+      ]
+    }
+  ],
+  "links": [
+    [
+      5,
+      6,
+      0,
+      8,
+      0,
+      "AUDIO"
+    ],
+    [
+      6,
+      8,
+      0,
+      4,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7972024500000007,
+      "offset": [
+        1604.3578573891245,
+        487.05404120007
+      ]
+    },
+    "node_versions": {
+      "ComfyUI_SparkTTS": "2e5241f4a64f81b4fbdb2900680b7c9cdc05e22d",
+      "comfy-core": "0.3.23",
+      "ComfyUI-VideoHelperSuite": "0d44f4b46dd05303664a1aa26e87534d5eef3ac8"
+    },
+    "ue_links": []
+  },
+  "version": 0.4
+}
