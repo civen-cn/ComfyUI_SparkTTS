@@ -28,16 +28,10 @@ class SparkTTSNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
+                "ref_audio": ("AUDIO",),
                 "text": ("STRING", {"multiline": True, "default": "你好，这是一段测试文本。"}),
                 "model_path": (["Spark-TTS-0.5B"], {"default": "Spark-TTS-0.5B"}),
                 "device": (["cuda", "cpu"], {"default": "cuda"}),
-            },
-            "optional": {
-                "prompt_text": ("STRING", {"multiline": True, "default": ""}),
-                "ref_audio": ("AUDIO",),
-                "gender": (["male", "female", "neutral"], {"default": "neutral"}),
-                "pitch": ("FLOAT", {"default": 0.0, "min": -1.0, "max": 1.0, "step": 0.1}),
-                "speed": ("FLOAT", {"default": 1.0, "min": 0.5, "max": 2.0, "step": 0.1}),
             }
         }
 
@@ -72,10 +66,16 @@ class SparkTTSNode:
 
         return self.model
 
-    def generate_speech(self, text, model_path, device, prompt_text="", ref_audio=None,
-                        gender="neutral", pitch=0.0, speed=1.0):
+    def generate_speech(self, text, model_path, device):
         # 加载模型
         model = self.load_model_if_needed(model_path, device)
+
+        # TODO: 从输入参数获取控制参数
+        prompt_text = ""
+        ref_audio = None,
+        gender = "neutral"
+        pitch = 0.0
+        speed = 1.0
 
         # 准备控制参数
         control_params = {
