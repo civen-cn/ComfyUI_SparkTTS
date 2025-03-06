@@ -1,5 +1,8 @@
 # ComfyUI_SparkTTS
-
+<div align="center">
+<a href="./readme.md">English</a>
+<a href="./readme.zh_cn.md">中文简体</a>
+</div>
 ComfyUI_SparkTTS is a custom node for ComfyUI that integrates [SparkAudio/Spark-TTS](https://github.com/SparkAudio/Spark-TTS) text-to-speech (TTS) functionality, allowing you to easily generate high-quality speech in your ComfyUI workflows.
 
 ## Introduction

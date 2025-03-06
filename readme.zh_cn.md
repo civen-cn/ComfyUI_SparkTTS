@@ -1,5 +1,8 @@
 # ComfyUI_SparkTTS
-
+<div align="center">
+<a href="./readme.md">English</a>
+<a href="./readme.zh_cn.md">中文简体</a>
+</div>
 ComfyUI_SparkTTS 是一个 ComfyUI 的自定义节点，它集成了 [SparkAudio/Spark-TTS](https://github.com/SparkAudio/Spark-TTS) 文本转语音（TTS）功能，让您能够在 ComfyUI 工作流中轻松生成高质量的语音。
 
 ## 简介
