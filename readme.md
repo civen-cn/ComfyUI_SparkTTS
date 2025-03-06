@@ -28,7 +28,7 @@ Spark-TTS 是一款先进的文本转语音系统，利用大型语言模型 (LL
 
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/yourusername/ComfyUI_SparkTTS.git
+git clone https://github.com/civen-cn/ComfyUI_SparkTTS.git
 ```
 
 2. 安装依赖：
