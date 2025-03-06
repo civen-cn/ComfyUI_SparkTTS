@@ -4,11 +4,11 @@ import torch
 import numpy as np
 from huggingface_hub import snapshot_download
 import soundfile as sf
-from PIL import Image
+import io
 import folder_paths
 
 # 添加 Spark-TTS 到路径
-SPARK_TTS_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "Spark-TTS")
+SPARK_TTS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Spark_TTS")
 if not os.path.exists(SPARK_TTS_PATH):
     print(f"Spark-TTS 路径不存在: {SPARK_TTS_PATH}，请确保已克隆 Spark-TTS 仓库")
     # 可以选择自动克隆仓库
@@ -18,9 +18,9 @@ sys.path.append(SPARK_TTS_PATH)
 
 # 导入 Spark-TTS 相关模块
 try:
-    from cli import SparkTTS
-except ImportError:
-    print("无法导入 Spark-TTS 模块，请确保已正确安装 Spark-TTS")
+    from .Spark_TTS.cli.SparkTTS import SparkTTS
+except ImportError as e:
+    print(f"无法导入 Spark-TTS 模块，请确保已正确安装 Spark-TTS: {e}")
 
 
 class SparkTTSNode:
@@ -60,63 +60,68 @@ class SparkTTSNode:
         # 如果模型路径变更或设备变更，重新加载模型
         if self.model is None or model_path != self.model_path or device_str != self.device_str:
             print(f"加载 Spark-TTS 模型: {model_path}")
-            
+
             # 检查模型是否存在，不存在则从 HuggingFace 下载
             if not os.path.exists(model_path):
                 print(f"模型不存在，从 HuggingFace 下载: {model_path}")
                 snapshot_download("SparkAudio/Spark-TTS-0.5B", local_dir=model_path)
-            
+
             self.model = SparkTTS(model_path, device)
             self.model_path = model_path
             self.device_str = device_str
-        
+
         return self.model
 
-    def generate_speech(self, text, model_path, device, prompt_text="", ref_audio=None, 
+    def generate_speech(self, text, model_path, device, prompt_text="", ref_audio=None,
                         gender="neutral", pitch=0.0, speed=1.0):
-        try:
-            # 加载模型
-            model = self.load_model_if_needed(model_path, device)
-            
-            # 准备控制参数
-            control_params = {
-                "gender": gender,
-                "pitch": pitch,
-                "speed": speed
-            }
+        # 加载模型
+        model = self.load_model_if_needed(model_path, device)
 
-            # 处理参考音频
-            prompt_speech_path = None
-            if ref_audio is not None:
-                # 参考 SeedVC-ComfyUI 的实现，保存临时参考音频文件
-                temp_ref_path = os.path.join(self.output_dir, f"ref_audio_temp_{hash(str(ref_audio))}.wav")
-                
-                # 假设 ref_audio 是包含波形数据和采样率的元组
-                waveform = ref_audio["waveform"]
-                sample_rate = ref_audio["sample_rate"]
-                
-                # 保存为临时文件
-                sf.write(temp_ref_path, waveform, sample_rate)
-                prompt_speech_path = temp_ref_path
+        # 准备控制参数
+        control_params = {
+            "gender": gender,
+            "pitch": pitch,
+            "speed": speed
+        }
+
+        # 处理参考音频
+        prompt_speech_path = None
+        if ref_audio is not None:
+            # 参考 SeedVC-ComfyUI 的实现，保存临时参考音频文件
+            temp_ref_path = os.path.join(self.output_dir, f"ref_audio_temp_{hash(str(ref_audio))}.wav")
+
+            # 假设 ref_audio 是包含波形数据和采样率的元组
+            waveform = ref_audio["waveform"]
+            sample_rate = ref_audio["sample_rate"]
+
+            # 将波形数据转换为正确的格式
+            if len(waveform.shape) == 3:  # [batch, channels, samples]
+                waveform = waveform.squeeze(0)  # 移除批次维度
+            if len(waveform.shape) == 2:  # [channels, samples]
+                waveform = waveform.transpose(0, 1)  # 转换为 [samples, channels]
             
-            # 执行推理
-            audio_array = inference(
-                model=model,
-                text=text,
-                prompt_text=prompt_text if prompt_text else None,
-                prompt_speech_path=prompt_speech_path,
-                control_params=control_params if any(control_params.values()) else None,
-                device=torch.device(device)
-            )
-            audio = {
-                "waveform": torch.FloatTensor(np.concatenate(audio_array)).unsqueeze(0).unsqueeze(0),
-                "sample_rate": sample_rate
-            }
-            return (audio,)
-            
-        except Exception as e:
-            print(f"生成语音时出错: {str(e)}")
-            return (None,)
+            # 确保数据是 numpy 数组
+            if torch.is_tensor(waveform):
+                waveform = waveform.cpu().numpy()
+
+            # 保存为临时文件
+            sf.write(temp_ref_path, waveform, sample_rate)
+            prompt_speech_path = temp_ref_path
+
+        # 执行推理
+        audio_array = inference(
+            model=model,
+            text=text,
+            prompt_text=prompt_text if prompt_text else None,
+            prompt_speech_path=prompt_speech_path,
+            control_params=control_params if any(control_params.values()) else None,
+            device=torch.device(device)
+        )
+        audio = {
+            "waveform": torch.FloatTensor(audio_array).unsqueeze(0).unsqueeze(0),
+            "sample_rate": 16000  # Spark-TTS 的采样率是 16000
+        }
+        return (audio,)
 
 
 def inference(model, text, prompt_text=None, prompt_speech_path=None, control_params=None, device=None):
@@ -138,33 +143,33 @@ def inference(model, text, prompt_text=None, prompt_speech_path=None, control_pa
     inputs = {
         "text": text,
     }
-    
+
     # 添加提示文本（如果有）
     if prompt_text:
         inputs["prompt_text"] = prompt_text
-    
+
     # 添加参考音频（如果有）
     if prompt_speech_path and os.path.exists(prompt_speech_path):
-        # 加载参考音频
-        ref_audio, sr = sf.read(prompt_speech_path)
-        inputs["prompt_speech"] = torch.tensor(ref_audio).to(device)
-    
+        inputs["prompt_speech_path"] = prompt_speech_path
+
     # 添加控制参数（如果有）
     if control_params:
         for key, value in control_params.items():
-            if value is not None and (isinstance(value, (int, float)) and value != 0) or (isinstance(value, str) and value != "neutral"):
+            if value is not None and (isinstance(value, (int, float)) and value != 0) or (
+                    isinstance(value, str) and value != "neutral"):
                 inputs[key] = value
-    
+
     # 执行推理
     with torch.no_grad():
         # 根据Spark-TTS的API调整这部分代码
         audio = model.inference(**inputs)
-        
+
         # 如果返回的是张量，转换为numpy数组
         if isinstance(audio, torch.Tensor):
             audio = audio.cpu().numpy()
-    
+
     return audio
+
 
 # 注册节点
 NODE_CLASS_MAPPINGS = {
@@ -173,4 +178,4 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "SparkTTS": "Spark TTS 语音合成"
-} 
+}

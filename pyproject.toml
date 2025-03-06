@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-sparktts"
+description = "Nodes related to [a/Spark-TTS](https://github.com/SparkAudio/Spark-TTS)."
+version = "1.0.1"
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/civen-cn/ComfyUI-SparkTTS"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "civen-cn"
+DisplayName = "ComfyUI-SparkTTS"
+Icon = ""
