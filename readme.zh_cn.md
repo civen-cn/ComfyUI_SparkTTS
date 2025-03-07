@@ -8,7 +8,7 @@ ComfyUI_SparkTTS 是一个 ComfyUI 的自定义节点，它集成了 [SparkAudio
 ## 简介
 
 Spark-TTS 是一款先进的文本转语音系统，利用大型语言模型 (LLM) 的强大功能实现高度准确且自然的语音合成。它旨在高效、灵活且功能强大，适合研究和生产使用。本插件将 Spark-TTS 的强大功能无缝集成到 ComfyUI 中，使您能够在工作流程中轻松添加语音合成能力。
-
+![Example Workflow](./example_workflows/workflow.png)
 ## 功能特点
 
 - **简洁高效**：Spark-TTS 完全基于 Qwen2.5 构建，无需使用流匹配等额外生成模型。它直接从 LLM 预测的代码中重建音频，简化流程，提高效率并降低复杂性。

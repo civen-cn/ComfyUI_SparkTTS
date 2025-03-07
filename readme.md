@@ -8,7 +8,7 @@ ComfyUI_SparkTTS is a custom node for ComfyUI that integrates [SparkAudio/Spark-
 ## Introduction
 
 Spark-TTS is an advanced text-to-speech system that leverages the power of Large Language Models (LLM) to achieve highly accurate and natural speech synthesis. It is designed to be efficient, flexible, and powerful, suitable for both research and production use. This plugin seamlessly integrates Spark-TTS capabilities into ComfyUI, enabling you to easily add speech synthesis capabilities to your workflows.
-
+![Example Workflow](./example_workflows/workflow.png)
 ## Features
 
 - **Simple and Efficient**: Spark-TTS is built entirely on Qwen2.5, eliminating the need for additional generative models like flow matching. It reconstructs audio directly from LLM-predicted codes, simplifying the process, improving efficiency, and reducing complexity.
@@ -78,7 +78,7 @@ https://huggingface.co/SparkAudio/Spark-TTS-0.5B models/Spark-TTS-0.5B
 
 ## Example Workflow
 
-![Example Workflow](./examples/example_workflow.png)
+![Example Workflow](./example_workflows/workflow.png)
 
 ## Common Issues
 
