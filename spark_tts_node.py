@@ -12,7 +12,7 @@ SPARK_TTS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Spar
 if not os.path.exists(SPARK_TTS_PATH):
     print(f"Spark-TTS 路径不存在: {SPARK_TTS_PATH}，请确保已克隆 Spark-TTS 仓库")
     # 可以选择自动克隆仓库
-    # os.system(f"git clone https://github.com/SparkAudio/Spark-TTS.git {SPARK_TTS_PATH}")
+    os.system(f"git clone https://github.com/SparkAudio/Spark-TTS.git {SPARK_TTS_PATH}")
 
 sys.path.append(SPARK_TTS_PATH)
 
