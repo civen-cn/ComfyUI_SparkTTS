@@ -32,8 +32,8 @@ Spark-TTS is an advanced text-to-speech system that leverages the power of Large
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/civen-cn/ComfyUI_SparkTTS.git
-cd ComfyUI_SparkTTS
-git clone https://github.com/SparkAudio/Spark-TTS.git Spark_TTS
+# cd ComfyUI_SparkTTS
+# git clone https://github.com/SparkAudio/Spark-TTS.git Spark_TTS
 ```
 
 2. Install dependencies:
@@ -41,7 +41,6 @@ git clone https://github.com/SparkAudio/Spark-TTS.git Spark_TTS
 ```bash
 cd ComfyUI_SparkTTS
 pip install -r requirements.txt
-pip install -r Spark_TTS/requirements.txt
 ```
 
 3. Model Location:
