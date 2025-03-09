@@ -30,6 +30,7 @@ class SparkTTSNode:
             "required": {
                 "ref_audio": ("AUDIO",),
                 "text": ("STRING", {"multiline": True, "default": "你好，这是一段测试文本。"}),
+                "prompt_text": ("STRING", {"multiline": True, "default": ""}),
                 "model_path": (["Spark-TTS-0.5B"], {"default": "Spark-TTS-0.5B"}),
                 "device": (["cuda", "cpu"], {"default": "cuda"}),
             }
@@ -66,7 +67,7 @@ class SparkTTSNode:
 
         return self.model
 
-    def generate_speech(self, ref_audio, text, model_path, device):
+    def generate_speech(self, ref_audio, text, prompt_text, model_path, device):
         # 加载模型
         model = self.load_model_if_needed(model_path, device)
 
