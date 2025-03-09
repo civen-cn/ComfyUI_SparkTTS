@@ -32,6 +32,8 @@ Spark-TTS 是一款先进的文本转语音系统，利用大型语言模型 (LL
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/civen-cn/ComfyUI_SparkTTS.git
+cd ComfyUI_SparkTTS
+git clone https://github.com/SparkAudio/Spark-TTS.git Spark_TTS
 ```
 
 2. 安装依赖：
@@ -39,11 +41,18 @@ git clone https://github.com/civen-cn/ComfyUI_SparkTTS.git
 ```bash
 cd ComfyUI_SparkTTS
 pip install -r requirements.txt
+pip install -r Spark_TTS/requirements.txt
 ```
 
 3. 模型地址：
-https://huggingface.co/SparkAudio/Spark-TTS-0.5B models/Spark-TTS-0.5B
-
+https://huggingface.co/SparkAudio/Spark-TTS-0.5B，放置到 ComfyUI/models/sparktts 目录下
+```bash
+# 手动下载模型，支持自动下载
+cd ComfyUI/models
+mkdir sparktts
+cd sparktts
+git clone https://huggingface.co/SparkAudio/Spark-TTS-0.5B
+```
 
 ## 使用方法
 
