@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-sparktts"
 description = "Nodes related to [Spark-TTS](https://github.com/SparkAudio/Spark-TTS)."
-version = "1.0.2"
+version = "1.0.3"
 license = {file = "LICENSE"}
 
 [project.urls]
