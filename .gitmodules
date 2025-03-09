@@ -1,0 +1,3 @@
+[submodule "Spark_TTS"]
+	path = Spark_TTS
+	url = https://github.com/SparkAudio/Spark-TTS.git
