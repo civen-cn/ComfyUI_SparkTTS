@@ -1,27 +1,10 @@
 import os
-import sys
 import torch
-import numpy as np
 from huggingface_hub import snapshot_download
 import soundfile as sf
-import io
 import folder_paths
-
-# 添加 Spark-TTS 到路径
-SPARK_TTS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Spark_TTS")
-if not os.path.exists(SPARK_TTS_PATH):
-    print(f"Spark-TTS 路径不存在: {SPARK_TTS_PATH}，请确保已克隆 Spark-TTS 仓库")
-    # 可以选择自动克隆仓库
-    os.system(f"git clone https://github.com/SparkAudio/Spark-TTS.git {SPARK_TTS_PATH}")
-
-sys.path.append(SPARK_TTS_PATH)
-
 # 导入 Spark-TTS 相关模块
-try:
-    from .Spark_TTS.cli.SparkTTS import SparkTTS
-except ImportError as e:
-    print(f"无法导入 Spark-TTS 模块，请确保已正确安装 Spark-TTS: {e}")
-
+from .sparktts.cli.SparkTTS import SparkTTS
 
 class SparkTTSNode:
     @classmethod
