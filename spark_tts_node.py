@@ -4,7 +4,7 @@ from huggingface_hub import snapshot_download
 import soundfile as sf
 import folder_paths
 # 导入 Spark-TTS 相关模块
-from .sparktts.cli.SparkTTS import SparkTTS
+from .src.cli.SparkTTS import SparkTTS
 
 class SparkTTSNode:
     @classmethod
@@ -34,7 +34,7 @@ class SparkTTSNode:
     def load_model_if_needed(self, model_path, device_str):
         device = torch.device(device_str)
 
-        model_path = os.path.join(folder_paths.models_dir, "sparktts", model_path)
+        model_path = os.path.join(folder_paths.models_dir, "src", model_path)
         # 如果模型路径变更或设备变更，重新加载模型
         if self.model is None or model_path != self.model_path or device_str != self.device_str:
             print(f"加载 Spark-TTS 模型: {model_path}")
